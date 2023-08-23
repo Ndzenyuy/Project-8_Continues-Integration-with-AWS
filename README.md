@@ -1,5 +1,7 @@
 # Project 8: Continues integration on AWS
 In this project, I used AWS to build a Continues Integration Pipeline, configured CodeCommit as a private repository to store our code, I used Visual Studio as the local coding IDE, configured it to connect with COdeCommit via ssh. When there is a new commit, cloudwatch triggers the Pipeline, first the code is tested in Sonarcloud for bugs, if the threshold is not met, the pipeline notifies failure and stops, else the pipeline proceeds to build. The build artifact is then deployed to an S3 bucket, a notification(SNS) is sent to the configured team via email. This project reduces Operational overhead, has a very short Time To Repair, needs no human intervention and fault isolation.
+## Architecture
+![](https://github.com/Ndzenyuy/Project-8_Continues-Integration-with-AWS/blob/main/images/project-8_CI%20on%20aws.jpg)
 
 ## Services Used
 - AWS Code Commit
@@ -67,11 +69,11 @@ Create a policy to access all CodeArtifact services, but limit the resource to t
   ```
   And verify our code is there
 
-  ![](successful upload on codecommit)
+  ![](https://github.com/Ndzenyuy/Project-8_Continues-Integration-with-AWS/blob/main/images/successful%20upload%20on%20codecommit.png)
 
 2. AWS CodeArtifact token
    On the console, search codeartifact and open, create a new repository _vprofile-maven-repo_. For public upstream repositories, we select _maven-central-store_ Click on next, for domain -> this AWS account, then we give the name "visualpath" then next, confirm the settings and click on create. We should see two created Repositories:
-  ![](create-repository-codeArtifact)
+  ![]([create-repository-codeArtifact](https://github.com/Ndzenyuy/Project-8_Continues-Integration-with-AWS/blob/main/images/create-repository-codeArtifact.png))
  
   Next we click on maven-central-store and click connection instructions.
 - Connection
@@ -143,7 +145,7 @@ For the pom.xml, we also change only the url
   codeartifact_token: <the generated codeartifact token in commandline>
   Project: <project-key-from-sonarcloud>
   ```
-  ![](parameter store)
+  ![](https://github.com/Ndzenyuy/Project-8_Continues-Integration-with-AWS/blob/main/images/parameter%20store.png)
 
 3. Build Job in AWS Code build
    Our first build project will be to run code analysis on Sonarcloud, So in the console, search codebuild -> create build Project:
@@ -201,7 +203,7 @@ For the pom.xml, we also change only the url
      policy name: vprofile-sonarparametersaccess
 
    - Run Build
-     ![](build-success)
+     ![](https://github.com/Ndzenyuy/Project-8_Continues-Integration-with-AWS/blob/main/images/artifact-build%20success.png)
 
   5. Build Artifact
      Create another build Job to build the artifact
@@ -250,9 +252,9 @@ For the pom.xml, we also change only the url
 
      - Run Build Job
        In Codebuild, select vprofile-build-artifact and run it
-       ![](build success artifact)
+       ![](https://github.com/Ndzenyuy/Project-8_Continues-Integration-with-AWS/blob/main/images/artifact-build%20success.png)
 
-     5. Notifications and Pipeline
+  6. Notifications and Pipeline
         - Create a notification Topic -> vprofile-pipeline-notification
         - Create a Subscription -> protocol=email
         - Confirm subscription, go to our email and click on confirm subscription in the mail from AWS SNS
@@ -294,10 +296,10 @@ For the pom.xml, we also change only the url
        
         - Run Pipeline
           Click Release change to test the pipeline
-          ![](pipeline)
+          ![](https://github.com/Ndzenyuy/Project-8_Continues-Integration-with-AWS/blob/main/images/pipelineBuildOnAWS.png)
 
           Check the s3 bucket
-          ![](s3 bucket)
+          ![](https://github.com/Ndzenyuy/Project-8_Continues-Integration-with-AWS/blob/main/images/S3%20bucket%20with%20artifacts.png)
 
      
 
