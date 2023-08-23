@@ -256,24 +256,50 @@ For the pom.xml, we also change only the url
         - Create a notification Topic -> vprofile-pipeline-notification
         - Create a Subscription -> protocol=email
         - Confirm subscription, go to our email and click on confirm subscription in the mail from AWS SNS
-        - Create pipeline: 
-         -> goto pipeline and create pipeline
-         -> name: vprofile-CI-pipeline
-         -> Source provider: AWS codecommit
-         -> Repository name: vprofile-code-repo
-         -> branch name: ci-aws
-         -> detection options: cloudwatch events
-         -> build provider: AWS codebuild
-         -> project name: vprofile-Build-artifact and skip deploy.
-         -> Stop pipeline execution and edit it
-      Add Test stage:
-        -> Add actions group(after the first stage)
-        -> Actions name: sonar-code-analysis
-        -> Action provider: AWS COdeBuild
-        -> Input artifact: SourceArtifact
-        -> Project name: vprofile-Build -> done
+        - Create pipeline:
           
-          
+               - goto pipeline and create pipeline
+               - name: vprofile-CI-pipeline
+               - Source provider: AWS codecommit
+               - Repository name: vprofile-code-repo
+               - branch name: ci-aws
+               - detection options: cloudwatch events
+               - build provider: AWS codebuild
+               - project name: vprofile-Build-artifact and skip deploy.
+               - Stop pipeline execution and edit it
+           
+       - Add Test stage:
+         
+              - Add actions group(after the first stage)
+              - Actions name: sonar-code-analysis
+              - Action provider: AWS COdeBuild
+              - Input artifact: SourceArtifact
+              - Project name: vprofile-Build -> done
+       - Add Deploy stage:
+         
+             - Create s3 buck: vprofile-build-artifact12, create a folder 'pipeline-artifacts'
+             - Add actions group
+             - Actions name: Deploy-to-S3
+             - Action provider: Amazon s3
+             - Input artifact: BuildArtifact
+             - Bucket: vprofile-build-artifact12
+             - S3 object key: pipeline-artifacts
+             - extract file before deploy
+             - Done, save pipeline
+       - Set notifications
+
+             - goto pipeline settings -> vprofile-CI-Pipeline-Notification
+             - Events that trigger notifications: Select all
+             - Configured Targets: SNS Topic, choose target: select SNS notification topic created earlier
+       
+        - Run Pipeline
+          Click Release change to test the pipeline
+          ![](pipeline)
+
+          Check the s3 bucket
+          ![](s3 bucket)
+
+     
 
 
 
