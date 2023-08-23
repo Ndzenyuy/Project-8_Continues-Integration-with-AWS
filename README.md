@@ -205,7 +205,7 @@ For the pom.xml, we also change only the url
    - Run Build
      ![](https://github.com/Ndzenyuy/Project-8_Continues-Integration-with-AWS/blob/main/images/artifact-build%20success.png)
      Check Sonarcloud
-     ![]()
+     ![](https://github.com/Ndzenyuy/Project-8_Continues-Integration-with-AWS/blob/main/images/quality%20gates.png)
 
   5. Build Artifact
      Create another build Job to build the artifact
